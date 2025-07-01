@@ -1,39 +1,59 @@
 {
-  "type": "generic",
-  "display": "CARelay Secure Terminal Chat",
+  "type": "Communication",
+  "display": "CARelay",
   "description": "Tor-hidden, terminal-based, end-to-end encrypted chat. Built by C Aguiar.",
-  "environment": "host",
-  "install": {
-    "commands": [
-      "apt update",
-      "apt install -y python3 python3-pip tor figlet screen git",
-      "pip3 install --upgrade pip",
-      "pip3 install pynacl blessed pysocks",
-      "rm -rf /home/container/*",
-      "git clone https://github.com/CollinAguiar/CARelay/tree/main /home/container",
-      "chmod +x /home/container/CAR_start.sh",
-      "chmod +x /home/container/CAR_stop.sh"
-    ]
-  },
-  "run": {
-    "command": "./CAR_start.sh",
-    "stop": "./CAR_stop.sh",
-    "stop_code": 0
-  },
+
   "data": {
-    "default_port": 7331
+    "repo": {
+      "type": "string",
+      "value": "https://github.com/CollinAguiar/CARelay.git",
+      "display": "Git Repository",
+      "desc": "URL to clone the CARelay server from.",
+      "required": true,
+      "userEdit": true
+    }
   },
-  "variables": [
+
+  "install": [
     {
-      "name": "TorHiddenService",
-      "env_variable": "TOR_HS",
-      "default_value": "carelay",
-      "description": "Name of the Tor hidden service directory (e.g. 'carelay')",
-      "user_viewable": true,
-      "user_editable": true,
-      "required": false
+      "type": "command",
+      "commands": [
+        "apt update",
+        "apt install -y python3 python3-pip tor git figlet screen",
+        "pip3 install --upgrade pip",
+        "pip3 install pynacl blessed pysocks",
+        "rm -rf /home/container/*",
+        "git clone ${repo} /home/container",
+        "chmod +x /home/container/CAR_start.sh",
+        "chmod +x /home/container/CAR_stop.sh"
+      ]
     }
   ],
+
+  "run": {
+    "command": "/home/container/CAR_start.sh",
+    "stop": "/home/container/CAR_stop.sh",
+    "stopCode": 0,
+    "stdin": {
+      "type": "stdin"
+    },
+    "autostart": false,
+    "autorecover": false,
+    "autorestart": false
+  },
+
+  "environment": {
+    "type": "host"
+  },
+
+  "supportedEnvironments": [
+    { "type": "host" }
+  ],
+
+  "requirements": {
+    "binaries": [ "python3", "tor", "git" ]
+  },
+
   "limits": {
     "memory": 256,
     "swap": 0,
