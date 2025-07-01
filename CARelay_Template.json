@@ -1,0 +1,44 @@
+{
+  "type": "generic",
+  "display": "CARelay Secure Terminal Chat",
+  "description": "Tor-hidden, terminal-based, end-to-end encrypted chat. Built by C Aguiar.",
+  "environment": "host",
+  "install": {
+    "commands": [
+      "apt update",
+      "apt install -y python3 python3-pip tor figlet screen git",
+      "pip3 install --upgrade pip",
+      "pip3 install pynacl blessed pysocks",
+      "rm -rf /home/container/*",
+      "git clone https://github.com/CollinAguiar/CARelay/tree/main /home/container",
+      "chmod +x /home/container/CAR_start.sh",
+      "chmod +x /home/container/CAR_stop.sh"
+    ]
+  },
+  "run": {
+    "command": "./CAR_start.sh",
+    "stop": "./CAR_stop.sh",
+    "stop_code": 0
+  },
+  "data": {
+    "default_port": 7331
+  },
+  "variables": [
+    {
+      "name": "TorHiddenService",
+      "env_variable": "TOR_HS",
+      "default_value": "carelay",
+      "description": "Name of the Tor hidden service directory (e.g. 'carelay')",
+      "user_viewable": true,
+      "user_editable": true,
+      "required": false
+    }
+  ],
+  "limits": {
+    "memory": 256,
+    "swap": 0,
+    "disk": 0,
+    "io": 500,
+    "cpu": 0
+  }
+}
