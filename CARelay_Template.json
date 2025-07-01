@@ -1,5 +1,5 @@
 {
-  "type": "Communication",
+  "type": "generic",
   "display": "CARelay",
   "description": "Tor-hidden, terminal-based, end-to-end encrypted chat. Built by C Aguiar.",
 
